@@ -5,6 +5,9 @@
   "scripts": {
     "serve": "npx vue-cli-service serve",
     "build": "npx vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
+    "build:public": "npx vue-cli-service build --skip-plugins @vue/cli-plugin-eslint --mode public",
+    "build:auth": "npx vue-cli-service build --skip-plugins @vue/cli-plugin-eslint --mode auth",
+    "build:authkv": "npx vue-cli-service build --skip-plugins @vue/cli-plugin-eslint --mode authkv",
     "lint": "npx vue-cli-service lint",
     "release": "git tag v$npm_package_version && git push && git push --tags"
   },

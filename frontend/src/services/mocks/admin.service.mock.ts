@@ -3,6 +3,6 @@ import { IAdmin } from "@/@types/admin.service";
 @injectable()
 export class AdminServiceMock implements IAdmin {
   getSecret(): Promise<string> {
-    return Promise.resolve("SUCH SECRET");
+    return Promise.resolve("A MOCK DEBUG SECRET");
   }
 }
