@@ -15,6 +15,7 @@ First, fork the repository, CI will fail for the moment, it's expected.
 
 Next, clone your fork and execute `./deploy.ps1` at the root of the directory. This will :
 + Deploy the infrastructure using Terraform
++ Link the created functionapp to the created static webapp using the Bring Your Own Function feature
 + Retrieve the connections string required to deploy the apps 
     + **AZURE_STATIC_WEB_APPS_API_TOKEN** is required to deploy the `frontend` directory to an Static Web App
     + **AZURE_FUNCTIONAPP_PUBLISH_PROFILE** is required to deploy the `function-keyvault-relay` to a functionapp
