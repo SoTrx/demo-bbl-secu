@@ -1,5 +1,5 @@
 variable "global_prefix" {
-  default     = "demo-bbl-secu-dep"
+  default     = "demo-bbl-secu-dep2"
   description = "The name of the container group"
 }
 
