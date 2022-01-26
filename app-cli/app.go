@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2019-05-01/resources"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/joho/godotenv"
-	"log"
-	"os"
 )
 
 func main() {
@@ -38,12 +39,12 @@ func main() {
 }
 
 func setColumnWidth(s string, max int) string {
-	const TAB_LEN = 4
+	const TAB_LEN = 8
 	// Add tabs for shorter strings to preserve alignment
 	// May not work if (max-len(s)) % 4 == 0
 	// but hey, this is a demo script not a library
 	if len(s) < max {
-		for i := len(s); i <= max; i += TAB_LEN {
+		for i := len(s); i < max; i += TAB_LEN {
 			s = s + "\t"
 		}
 		return s
@@ -61,7 +62,7 @@ type config struct {
 
 // Fetch all the required env vars, die if any of them aren't defined
 func loadConfig() config {
-	err := godotenv.Load()
+	err := godotenv.Load("./config/.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
