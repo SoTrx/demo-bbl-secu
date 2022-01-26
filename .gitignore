@@ -2,3 +2,7 @@
 frontend/.vscode
 **/.idea
 backend
+*.exe
+*.hcl
+*.tfstate
+*.tfstate.backup
