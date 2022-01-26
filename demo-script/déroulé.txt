@@ -1,0 +1,8 @@
+Authentification :
+ + CLI/Browser auth using CLI app -> c'est facile avec un elib de faire
+ + Frontend -> "Mais on a pas besoin d'utiliser une lib, c'est géré pour nous"
+
+Authorization :
+    + Transition -> "Maintenant on peut savoir qui est l'utilisateur, mais comment savoir quels droits il possède sur l'appli ?"
+    + Frontend -> Regardez y'a des scopes.
+    + Keyvault -> Identité de l'appli 

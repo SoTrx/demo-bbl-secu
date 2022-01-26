@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "label": "Petit Lu",
+    "code": "356650012213"
+  },
+  {
+    "id": 2,
+    "label": "Pepito",
+    "code": "356650012214"
+  },
+  {
+    "id": 3,
+    "label": "Petits sablés",
+    "code": "356650012215"
+  },
+  {
+    "id": 4,
+    "label": "BN fourrés à la frais",
+    "code": "356650012216"
+  },
+  {
+    "id": 5,
+    "label": "Oréo",
+    "code": "356650012217"
+  },
+  {
+    "id": 6,
+    "label": "Galettes St Michel",
+    "code": "356650012218"
+  },
+  {
+    "id": 7,
+    "label": "Granola",
+    "code": "3259011046300"
+  },
+  {
+    "id": 8,
+    "label": "Bjorg Bio",
+    "code": "3566500122110"
+  }
+]

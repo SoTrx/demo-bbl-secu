@@ -1,0 +1,9 @@
+Appli secu
+BBL 
+Azure AD authentification et l'authorisation dans l'appli
+Montrer le dev
+Demo Live 
+Webapp ? ez Auth ? 
+Get token.
+SCHEME ? 
+SDK active directory 

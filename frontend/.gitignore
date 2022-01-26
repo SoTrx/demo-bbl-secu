@@ -1,0 +1,11 @@
+**/node_modules
+npm-debug.log
+/dist
+config.json
+yarn-error.log
+.env*
+.gitattributes
+.idea
+
+#Electron-builder output
+/dist_electron

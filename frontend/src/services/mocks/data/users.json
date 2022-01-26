@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "email": "mock.mock@mocked.mock",
+    "identityProvider": "mock",
+    "roles": ["authenticated"]
+  },
+  {
+    "id": "2",
+    "email": "admin.mock@mocked.mock",
+    "identityProvider": "mock",
+    "roles": ["authenticated", "admin"]
+  }
+]
