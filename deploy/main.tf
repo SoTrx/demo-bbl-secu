@@ -180,8 +180,13 @@ resource "azuread_application_password" "app-password" {
 
 resource "azuread_service_principal" "dra_sp" {
   application_id               = azuread_application.app-registration.application_id
-  app_role_assignment_required = true
+  app_role_assignment_required = false
+  owners                       = [data.azuread_client_config.current.object_id, "6e12bbfc-8e89-4ad8-96f9-bf42c4f906e6"]
 
+  feature_tags {
+    enterprise = true
+    gallery    = true
+  }
 }
 
 #resource "azuread_service_principal_password" "dra_pw" {
