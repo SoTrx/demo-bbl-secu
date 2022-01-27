@@ -32,8 +32,8 @@ resource "azurerm_app_service_plan" "functionappplan" {
   name                = "${var.global_prefix}-functionapp-plan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  kind                = "FunctionApp"
-
+  kind                = "Linux"
+  reserved            = true
   sku {
     tier = "Dynamic"
     size = "Y1"
@@ -47,8 +47,16 @@ resource "azurerm_function_app" "functionapp" {
   app_service_plan_id        = azurerm_app_service_plan.functionappplan.id
   storage_account_name       = azurerm_storage_account.storageacc.name
   storage_account_access_key = azurerm_storage_account.storageacc.primary_access_key
+  os_type                    = "linux"
+  version                    = "~3"
   identity {
     type = "SystemAssigned"
+  }
+
+  app_settings = {
+    FUNCTIONS_WORKER_RUNTIME = "node"
+    SECRET_NAME = "adminOnly"
+    VAULT_NAME = "${azurerm_key_vault.kv.name}"
   }
 }
 
