@@ -1,0 +1,43 @@
+Donc, nous sommes ici pour parler d'identité sur Azure. Le but d'aujourd'hui ça va être de vous donner un aperçu de ce qu'il est possible de faire en matière d'identité sur Azure mais aussi de clarifier les notions pour vous permettre de faire des choix qui sont efficaces. Et Ce que j'entends par efficace, c'est de ne pas avoir tergiverser sur quoui faire quand on a une situation où on doit gérer de l'identité
+
+Donc on va commencer très rapidement par quelque chose de très basique, quand on parle d'identité, on parle souvent et de manière interchangeable entre Autentification et Autorisation.
+La différence entre les deux étant que l'authentification s'intersse à QUI accède à uen ressource, alors que l'autorisation s'intèresse à si l'appelant A LE DROIT d'accèder à la ressource. 
+Je fais la précision ici parce ce qu'on a tendance à oublier que ce sont deux notions ditinctes, simplement parce ce qu'on les utilise en même temps, c'eest à dire on a tendance à voulor savoir à la fois qui est l'utilisateur et qu'est-ce qu'il peut faire dans l'application.
+Mais ce n'est pas toujours vrai, on a des cas où on utilise seulement de l'autorisation, pensez par exemple à des clefs d'API ou même à des liens de partage quand vous stockez vos documents sur un service en ligne comme One Drive ou Google drive u n'importe, et où vous pouvez obtenir un lien qui permet à n'importe qui qui le possède de consulter ou même modifier le document. 
+
+Alors pourquoi ce rappel ? Parce ce que nous on va s'intéresser tout particulièrement à l'authentification, et aux difféents mécanismes qui permettent de gérer l'identité sur Azure. Donc en terme d'authentification, vous avez sûrement entendu parler de Service Principal - cad un compte de service-, vous avez peut être entendu parler de Managed Identity -cad une identité gérée-, et vous n'etes probablement jamais descendu dans les méandres de l'App Registration - de l'inscription d'application.
+Alors, à quoi correspondent tous ces mots, que je vous lance comme si c'éait évident ? Pourquoi est-ce qu'on parle d'authentification et non pas d'autorisation ? Bah on va voir tout de suite en regardant comment fonctionne l'identité dans Azure.
+
+Alors comment ça se passe ? Imaginez vous creez une application pour votre entreprise qui fait de la gestion de ticket,  comme Jira, mais en mieux. Cete application, vous décidez de l'héberger sur l'Azure, parce ce que vous avez déjà votre Azure Active Directory d'entreprise, et vous pouvez vous resservir les utilisateurs qui sont dedans.
+Chaque utilisateur est en fait un tuple d'une identité, un compte utilisateur par exemple et de droits - mettons le droit d'éditer de nouveaux tickets. 
+Et c'est là où on retrouve noutre séparation entre autorisation, les droits et authentifuication avec une identité, le compte utilisateur.
+Mais su le schéma, on voit que cette identité peut être un utilisateur, mais aussi justement un Service Principal ou une Managed identity.
+Et c'est là on va commencer à comprendre ce que sont ces concepts, ce sont tous les deux des comptes de services, à opposer à des comptes d'utilisateurs humains. La différence entre els deux étant que le Service Principal est gérée par le developpeur du service, et que la Managed Identity est gérée par Azure.   
+Maintenant ce qu'il va rester à expliquer, c'est qu'est-ce que l'Application Registration tout en haut. 
+Eh bien maintenant imaginez que votre application de gestion de tickets elle ait tellement de succès que la proposez en SaaS à une autre entreprise. Vous ne voulez pas dupliquer l'architecture mais vous ne voulez pas partager vos utilisateurs entre les deux instances de l'application. Eh bien l'application registration c'est une sorte de classe abstraire qui décrit le fonctionnement global de votre application, mais sans rien spécifier sur la gestion de l'identité. Quand vous associez cette Application Registration à un Tenant, à une instance d'Azure Active Directory, vous obtenez un Instance de l'application qui partage les ressource mais pas les utilisateurs.
+
+
+Alors comment choisir entre ces concepts maintenant qu'on les connait ? 
+Eh bien voici un petit arbre de décision. De manière générale, si vous chercher à créer une application qui va gérer des utilisateurs humains, vous devrez passer par une App Registration. Si au contraire vous cherchez juste à acceder à un service Azure avec un programme, vous devrez utiliser soit une Managed Identity soit un Servcie Principal. De là, si votre programme est hébergé sur Azure, il faudra utiliser une managed identity, et si le programme n'est pas Azure, un Service Principal.
+
+
+Il y a beaucoup d'informations à ingérer, et c'est pour ça qu'on va montrer par l'exemple tout ceci.
+D'abord. Le Service Principal. 
+[Demo Go]
+
+Ensuite on va s'attaquer à la managed identity et à l'app registration. Donc voici une application type, j'ai un frontend qui est hébergé dans un hébergement d'application statique, et je veux que ce service puisse authentifier des utilisateurs humains. Comme ce sont des utilisateurs humains, j'utiliserai une App Registration. 
+Ensuite, le backend de mon application statqique, qui est en serverless, a besoin d'aller chercher un secret dans un keyvault, le servcie de gestion de secrets managé d'Azure. Comme j'ai besoin d'accéder à un service Azure avec un programme qui lui aussi est sur Azure, je vais utliser une managed identity !
+
+[Demo autre]
+
+
+
+
+msx
+
+
+
+MORE :
+Pour aller plus loin, le concept de Application Registration est en fait complétement indissociable du concept de Service Principal.
+Peut être que certains d'entre vous ont déjà utilisé a commande de l'Azure CLI qui permet de générer un Service Principal. Ce que fait vraiment cette commande, c'est qu'elle génère une Application Registration qu'elle instancie dans votre tenant puis crée un compte de service auquel elle done les droits Contributeurs avant de vous renvoyer les informations de connexion.
+
