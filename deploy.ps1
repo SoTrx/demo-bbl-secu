@@ -1,12 +1,4 @@
 
-#Variables
-$PREFIX = "demo-bbl-secu-dep2"
-$RG_NAME = "$PREFIX-rg"
-$SWA_NAME = "$PREFIX-auth-swa"
-$KV_NAME = "$PREFIX-kv"
-$AR_NAME = "$PREFIX-ar"
-$FA_NAME = "$PREFIX-functionapp"
-$SUB_ID = az account show --query id -o tsv
 
 function deployTerraform(){
     cd deploy 
@@ -46,25 +38,27 @@ function logToStdout($type, $text) {
 logToStdout [ColorMap]::Debug "Creating infrastructure"
 #deployTerraform
 logToStdout [ColorMap]::Debug "Infrastructure created"
-# $json = Get-Content $env:jsonPath | Out-String | ConvertFrom-Json
 
-# foreach ($prop in $json.psobject.properties) {
-#     Write-Host("##vso[task.setvariable variable=$($prop.Name);]$($prop.Value.value)")
-# }
+#Variables
+$PREFIX = (getTerraformOutput "rg_name") -Replace '-rg',''
+$RG_NAME = "$PREFIX-rg"
+$SWA_NAME = "$PREFIX-auth-swa"
+$KV_NAME = "$PREFIX-kv"
+$AR_NAME = "$PREFIX-ar"
+$FA_NAME = "$PREFIX-functionapp"
+$SUB_ID = az account show --query id -o tsv
 
 # Linking FA to SWA
 logToStdout [ColorMap]::Debug "Linking FunctionApp to staticwebapp"
 az staticwebapp functions link -n $SWA_NAME -g $RG_NAME --function-resource-id "/subscriptions/$SUB_ID/resourceGroups/$RG_NAME/providers/Microsoft.Web/sites/$FA_NAME" --force 
 logToStdout [ColorMap]::Debug "Linking completed"
 
-# TODO : Adding app registrations setting to SWA
-logToStdout [ColorMap]::Debug "Configuring Static Web app to use the auth provider"
-$appId = getTerraformOutput "app_id" 
-$appPass = getTerraformOutput "app_password" 
-echo $appId
-echo $appPass
-az staticwebapp appsettings set --name $SWA_NAME --setting-names "AAD_CLIENT_ID=$appId" --setting-names "AAD_CLIENT_SECRET=$appPass"
-logToStdout [ColorMap]::Debug "Configuring Static Web configured"
+# Adding app registrations setting to SWA (done during the demo)
+# logToStdout [ColorMap]::Debug "Configuring Static Web app to use the auth provider"
+# $appId = getTerraformOutput "app_id" 
+# $appPass = getTerraformOutput "app_password" 
+# az staticwebapp appsettings set --name $SWA_NAME --setting-names AAD_CLIENT_SECRET=$appPass AAD_CLIENT_ID=$appId
+# logToStdout [ColorMap]::Debug "Configuring Static Web configured"
 
 
 #logToStdout [ColorMap]::Debug "Storing admin pseudo-secret in keyvault"
@@ -72,7 +66,7 @@ logToStdout [ColorMap]::Debug "Configuring Static Web configured"
 #logToStdout [ColorMap]::Debug "Secret stored"
 
 
-# Setting up Istio and cluster DNS link
+# Fetching deployment strings
 logToStdout [ColorMap]::Debug "Fetching deployments secrets"
 $swaApiKey = az staticwebapp secrets list -g $RG_NAME -n $SWA_NAME --query properties.apiKey -o tsv
 $functionAppApiKey = az functionapp deployment list-publishing-profiles -g $RG_NAME -n $FA_NAME --xml
