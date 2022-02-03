@@ -6,3 +6,4 @@ backend
 *.hcl
 *.tfstate*
 *.tfstate.backup
+*.pptx

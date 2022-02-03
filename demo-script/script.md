@@ -1,11 +1,5 @@
-Mon rôle aujourd'hui ça va être de vous présenter différentes manière de s'authentifier dans Azure, différentes manières de pouvoir faire de la sécurité quand pluseiurs situations se présentent à nous.
-En particulier, ce que l'on va voir aujourd'hui, c'est :
-1 - Comment identifier une resource externe non interactive - comme un script - à Azure
-2 - Comment identifier des utilsateurs humains à une resource qui se trouve dans Azure
-3 - Comment identifier deux services qui se trouvent tous les deux sur Azure.
-
-
-Donc on va commencer par le premier, c'est à dire "Comment s'authentifier avec un script qui tourne sur une machine qui n'est pas dans Azure".
+Ce compte de service, c'est souvent le premier contact qu'ont les developpeurs avec l'identité sur Azure. 
+Je le rapelle, son cas d'utilisation c'est  "Comment s'authentifier avec un script qui tourne sur une machine qui n'est pas dans Azure".
 Donc je suis un dev et je veux accéder à mon compte Azure pour faire, par exemple, des opérations de maintenance automatiques. 
 
 [app.go]
@@ -16,17 +10,22 @@ Donc rapidement, ce programme il va commencer par récupérer la configuration v
 [executer app-cli]
 Donc ce programme il fonctionne, mais c'est pas ça qui nous intéresse, ce qui nous intersse c'est : "Comment il fait pour accéder à Azure".
 
-En fait, comme vous pouvez le voir ici, ce qu'il fait c'est qu'il utilise un Service principal, c'est à dire une identité génerée qui va avoir des droits et des limites, ici il a le rôel Reader, puisqu'il n'y a pas besoin de plu.
+En fait, comme vous pouvez le voir ici, ce qu'il fait c'est qu'il utilise un compte de service - un service principal - c'est à dire une identité génerée qui va avoir des droits et des limites, ici il a le rôel Reader, puisqu'il n'y a pas besoin de plu.
 
 A partir de là, j'ai juste à charger les variables de cette identté génerée  dans l'environnement et la bibliothèque Azure pour go sera capable de gérer l'authentification automatiquement.
 
 Donc ça c'est quelque chose qui est très classique, utiliser des crendentials. Mais l'avantage du cloud public, c'est les fonctionnalités qui sont managées.
 
 Et pour voir ça on va regarder un exemple un peu différent.
+[Slide "Par la pratique : Managed Identity & App registration"]
+
+Ensuite on va s'attaquer à la managed identity et à l'app registration. Donc voici une application type, j'ai un frontend qui est hébergé dans un hébergement d'application statique, et je veux que ce service puisse authentifier des utilisateurs humains. Comme ce sont des utilisateurs humains, j'utiliserai une App Registration. 
+Ensuite, le backend de mon application statqique, qui est en serverless, a besoin d'aller chercher un secret dans un keyvault, le servcie de gestion de secrets managé d'Azure. Comme j'ai besoin d'accéder à un service Azure avec un programme qui lui aussi est sur Azure, je vais utliser une managed identity !
+
 
 [Ouvrir app-vu en dev]
 
-J'ai maintenant un frontend en Vue. Ce frontend, c'est une sorte de dashboard qui présente à la fois de l'authentification et de l'authorisation.
+Donc on va plonger dans le code. Voici mon frontend en Vue. Ce frontend, c'est une sorte de dashboard qui présente à la fois de l'authentification et de l'authorisation.
 Authentification parce ce que mon utilisateur doit être connecté, mais aussi autorisation parce ce que j'aid eux types d'utilisateurs:
 - un user qui voit les trois premiers onglets
 - un admin, avec lequel je suis connecté, qui a un panel d'aministration en plus
